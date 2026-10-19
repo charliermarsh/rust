@@ -185,16 +185,22 @@ fn to_llvm_tls_model(tls_model: TlsModel) -> llvm::ThreadLocalMode {
 pub(crate) unsafe fn create_module<'ll>(
     tcx: TyCtxt<'_>,
     llcx: &'ll llvm::Context,
+    target_machine: Option<&llvm::TargetMachine>,
     mod_name: &str,
 ) -> *const llvm::Module {
     let mod_name_cstr = SmallCStr::new(mod_name);
     let llmod_raw =
         unsafe { llvm::LLVMModuleCreateWithNameInContext(mod_name_cstr.as_ptr(), llcx) };
-    init_module(tcx, llcx, unsafe { &*llmod_raw });
+    init_module(tcx, llcx, unsafe { &*llmod_raw }, target_machine);
     llmod_raw
 }
 
-fn init_module<'ll, 'tcx>(tcx: TyCtxt<'tcx>, llcx: &'ll llvm::Context, llmod: &'ll llvm::Module) {
+fn init_module<'ll, 'tcx>(
+    tcx: TyCtxt<'tcx>,
+    llcx: &'ll llvm::Context,
+    llmod: &'ll llvm::Module,
+    target_machine: Option<&llvm::TargetMachine>,
+) {
     let sess = tcx.sess;
     let cx = SimpleCx::new(llmod, llcx, tcx.data_layout.pointer_size());
 
@@ -210,9 +216,17 @@ fn init_module<'ll, 'tcx>(tcx: TyCtxt<'tcx>, llcx: &'ll llvm::Context, llmod: &'
 
     // Ensure the data-layout values hardcoded remain the defaults.
     {
-        let tm = crate::back::write::create_informational_target_machine(sess);
+        let informational_target_machine;
+        let target_machine = match target_machine {
+            Some(target_machine) => target_machine,
+            None => {
+                informational_target_machine =
+                    crate::back::write::create_informational_target_machine(sess);
+                informational_target_machine.raw()
+            }
+        };
         unsafe {
-            llvm::LLVMRustSetDataLayoutFromTargetMachine(llmod, tm.raw());
+            llvm::LLVMRustSetDataLayoutFromTargetMachine(llmod, target_machine);
         }
 
         let llvm_data_layout = unsafe { llvm::LLVMGetDataLayoutStr(llmod) };
