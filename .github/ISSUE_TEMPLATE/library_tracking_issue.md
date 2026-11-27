@@ -2,8 +2,11 @@
 name: Library Tracking Issue
 about: A tracking issue for an unstable library feature.
 title: Tracking Issue for XXX
-labels: C-tracking-issue, T-libs, S-tracking-unimplemented
+labels: ''
+assignees: ''
+
 ---
+
 <!--
 Thank you for creating a tracking issue!
 

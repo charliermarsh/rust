@@ -2,8 +2,11 @@
 name: Future Incompatibility Tracking Issue
 about: A tracking issue for a future-incompatible lint
 title: Tracking Issue for future-incompatibility lint XXX
-labels: C-tracking-issue C-future-incompatibility T-compiler A-lints
+labels: ''
+assignees: ''
+
 ---
+
 <!--
 Thank you for creating a future-incompatible tracking issue! 📜 These issues
 are for lints that implement a future-incompatible warning.

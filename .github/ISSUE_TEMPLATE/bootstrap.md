@@ -1,7 +1,10 @@
 ---
 name: Bootstrap (Rust Build System) Report
 about: Issues encountered on bootstrap build system
-labels: C-bug, T-bootstrap
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 <!--

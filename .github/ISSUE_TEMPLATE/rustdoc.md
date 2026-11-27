@@ -1,8 +1,12 @@
 ---
 name: Problem with rustdoc
 about: Report an issue with how docs get generated.
-labels: C-bug, T-rustdoc
+title: ''
+labels: ''
+assignees: ''
+
 ---
+
 <!--
 Thank you for filing a rustdoc issue! Rustdoc is the tool that handles the generation of docs.  It is usually invoked via `cargo doc`, but can also be used directly.
 
